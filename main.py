@@ -56,7 +56,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 load_dotenv()
 
 with open("config.yml", "r") as _f:
-    _raw = _f.read()
+    _raw =_f.read()
 for _k, _v in os.environ.items():
     _raw = _raw.replace(f"${{{_k}}}", _v)
 CFG = yaml.safe_load(_raw)
