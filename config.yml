@@ -9,10 +9,10 @@ bot:
 
 force_join:
   enabled: true
-  channel: "@your_channel"
-  group: "@your_group"
-  channel_url: "https://t.me/your_channel"
-  group_url: "https://t.me/your_group"
+  channel: "@learnUp_community"
+  group: "@codex_esports"
+  channel_url: "t.me/learnUp_community"
+  group_url: "t.me/codex_esports"
 
 referral:
   enabled: true
