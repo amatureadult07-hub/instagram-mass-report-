@@ -915,15 +915,12 @@ async def send_main(update, ctx, caption=None):
     kb = main_menu_kb(uid)
     if update.callback_query:
         try:
-            await update.callback_query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML)
+            await update.callback_query.edit_message_caption(caption=text, parse_mode=ParseMode.HTML, reply_markup=kb)
             return
         except Exception:
             pass
     if update.message:
-        if os.path.exists("image.jpg"):
-            await update.message.reply_photo(photo="image.jpg", caption=text, parse_mode=ParseMode.HTML, reply_markup=kb)
-        else:
-            await update.message.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=kb)
+        await update.message.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=kb)
     else:
         await update.effective_chat.send_message(text, parse_mode=ParseMode.HTML, reply_markup=kb)
 
@@ -940,10 +937,7 @@ async def edit_or_reply(update, ctx, text, kb=None):
             except Exception:
                 pass
     if update.message:
-        if os.path.exists("image.jpg"):
-            await update.message.reply_photo(photo="image.jpg", caption=text, parse_mode=ParseMode.HTML, reply_markup=kb)
-        else:
-            await update.message.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=kb)
+        await update.message.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=kb)
 
 
 async def guard(update, ctx):
@@ -1134,7 +1128,7 @@ async def handle_text(update, ctx):
     if text == "📊 My Stats":
         u = USERS[str(uid)]
         refs = len(u.get("referrals", []))
-        await edit_or_reply(update, ctx, f"<pre>{head('MY STATS')}</pre>\n<b>Points</b> · {u.get('points',0):,}\n<b>Referrals</b> · {refs}\n<b>Reports</b> · {u.get('total_reports',0)}\n<b>Success</b> · ✅ {u.get('success_reports',0)}\n<b>Accounts</b> · {len(u.get('ig_accounts', {}))}", main_menu_kb(uid))
+        await edit_or_reply(update, ctx, f"<pre>{head('MY STATS')}</pre>\n<b>Points</b> · {u.get('points',0):,}\n<b>Referrals</b> · {refs}\n<b>Reports</b> · {u.get('total_reports',0)}\n<b>Successful</b> · {u.get('success_reports',0)}", main_menu_kb(uid))
         return
 
     if text == "📜 History":
@@ -1197,7 +1191,7 @@ async def handle_text(update, ctx):
             total_success = sum(u.get("success_reports", 0) for u in USERS.values())
             total_refs = sum(len(u.get("referrals", [])) for u in USERS.values())
             total_pts = sum(u.get("points", 0) for u in USERS.values())
-            await edit_or_reply(update, ctx, f"<pre>{head('FULL STATS')}</pre>\nUsers · {total_users}\nPremium · {premium_users}\nLogged IG · {logged}\nSuccess Reports · {total_success}\nTotal Refs · {total_refs}\nPoints Circulating · {total_pts:,}", admin_menu_kb())
+            await edit_or_reply(update, ctx, f"<pre>{head('FULL STATS')}</pre>\nUsers · {total_users}\nPremium · {premium_users}\nLogged IG · {logged}\nSuccess Reports · {total_success}\nTotal Refs · {total_refs}\nTotal Points · {total_pts}", admin_menu_kb())
             return
         if text == "🔄 Refresh Proxies":
             await edit_or_reply(update, ctx, "⏳ Refreshing proxies...")
